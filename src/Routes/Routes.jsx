@@ -4,6 +4,11 @@ import MainLayout from "../layout/MainLayout";
 import AllApps from "../pages/AllApps/AllApps";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppDetails from "../pages/AppDetails/AppDetails";
+import Installation from "../pages/Installations/Installations";
+import Installations from "../pages/Installations/Installations";
+
+
+
 const router = createBrowserRouter([
 
     {
@@ -21,6 +26,10 @@ const router = createBrowserRouter([
         {
              path: "apps/:id",
              element: <AppDetails/>,
+        },
+        {
+            path:"installations",
+            element:<Installations/>
         }
     ]
 
