@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { FaGithub, FaBars, FaTimes } from "react-icons/fa";
 import logo from "../../assets/logo.png";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
+
 
 
 const Navbar = () => {
@@ -9,7 +10,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "Apps", path: "/apps" },
+    { name: "AllApps", path: "/apps" },
     { name: "Installations", path: "/installation" },
   ];
 
