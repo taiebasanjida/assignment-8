@@ -22,15 +22,12 @@ const AppDetails = () => {
   const [loading, setLoading] = useState(true);
   const [installed, setInstalled] = useState(false);
 
-  // Load app data
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => {
       const foundApp = appsData.find((a) => String(a.id) === String(id));
       if (foundApp) {
         setApp(foundApp);
-
-        // Check if installed
         const installedApps =
           JSON.parse(localStorage.getItem("installedApps")) || [];
         const isInstalled = installedApps.some(
@@ -43,7 +40,6 @@ const AppDetails = () => {
     return () => clearTimeout(timer);
   }, [id]);
 
-  // Install handler
   const handleInstall = () => {
     if (!app) return;
     const installedApps =
@@ -74,14 +70,16 @@ const AppDetails = () => {
 
   if (!app) {
     return (
-      <div className="text-center py-20">
-        <h2 className="text-2xl font-semibold text-gray-800">App Not Found</h2>
-        <p className="text-gray-500 mt-2">
+      <div className="text-center py-20 px-4">
+        <h2 className="text-2xl md:text-3xl font-semibold text-gray-800">
+          App Not Found
+        </h2>
+        <p className="text-gray-500 mt-2 text-sm md:text-base">
           We couldn’t find the app you’re looking for.
         </p>
         <button
           onClick={() => navigate("/apps")}
-          className="mt-5 px-6 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition"
+          className="mt-5 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-sm md:text-base"
         >
           Back to All Apps
         </button>
@@ -98,26 +96,29 @@ const AppDetails = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <ToastContainer position="top-right" autoClose={2000} />
 
       {/* Top Section */}
-      <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col lg:flex-row gap-8">
+      <div className="bg-white rounded-2xl shadow-md p-5 sm:p-8 flex flex-col lg:flex-row items-center lg:items-start gap-8">
         {/* Image */}
-        <div className="lg:w-1/3">
+        <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3">
           <img
             src={app.image}
             alt={app.title}
-            className="w-full h-64 object-cover rounded-xl shadow-sm"
+            className="w-full h-56 sm:h-64 md:h-72 object-cover rounded-xl shadow-sm"
           />
         </div>
 
         {/* Details */}
-        <div className="lg:w-2/3 space-y-4">
-          <h1 className="text-3xl font-bold text-gray-800">{app.title}</h1>
-          <p className="text-gray-500">{app.companyName}</p>
+        <div className="w-full lg:w-2/3 space-y-4 text-center lg:text-left">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+            {app.title}
+          </h1>
+          <p className="text-gray-500 text-sm sm:text-base">{app.companyName}</p>
 
-          <div className="flex items-center gap-3 flex-wrap">
+          {/* Rating + Info */}
+          <div className="flex flex-wrap justify-center lg:justify-start items-center gap-3 sm:gap-5">
             <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
                 <FaStar
@@ -126,17 +127,20 @@ const AppDetails = () => {
                     i < Math.round(app.ratingAvg)
                       ? "text-yellow-400"
                       : "text-gray-300"
-                  }`}
+                  } text-base sm:text-lg`}
                 />
               ))}
-              <span className="ml-2 text-gray-700">
+              <span className="ml-2 text-gray-700 text-sm sm:text-base">
                 {app.ratingAvg.toFixed(1)}
               </span>
             </div>
-            <span className="text-gray-500">•</span>
-            <span className="text-gray-600">{app.reviews} reviews</span>
-            <span className="text-gray-500">•</span>
-            <span className="text-gray-600">
+
+            <span className="text-gray-400 hidden sm:inline">•</span>
+            <span className="text-gray-600 text-sm sm:text-base">
+              {app.reviews} reviews
+            </span>
+            <span className="text-gray-400 hidden sm:inline">•</span>
+            <span className="text-gray-600 text-sm sm:text-base">
               {app.downloads.toLocaleString()} downloads
             </span>
           </div>
@@ -145,7 +149,7 @@ const AppDetails = () => {
           <button
             onClick={handleInstall}
             disabled={installed}
-            className={`px-6 py-2 rounded-lg font-medium transition ${
+            className={`px-6 py-2 rounded-lg font-medium transition w-full sm:w-auto ${
               installed
                 ? "bg-gray-300 text-gray-700 cursor-not-allowed"
                 : "bg-purple-600 text-white hover:bg-purple-700"
@@ -156,10 +160,10 @@ const AppDetails = () => {
 
           {/* Description */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-800 mt-6 mb-2">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mt-6 mb-2">
               Description
             </h3>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
               {app.description ||
                 "No description provided for this app. Check back later for more information."}
             </p>
@@ -168,19 +172,29 @@ const AppDetails = () => {
       </div>
 
       {/* Review Chart */}
-      <div className="bg-white rounded-2xl shadow-md p-6 mt-10">
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">
+      <div className="bg-white rounded-2xl shadow-md p-5 sm:p-8 mt-10">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800 text-center sm:text-left">
           Reviews Breakdown
         </h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={reviewData} margin={{ top: 20, right: 20, left: 0, bottom: 10 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="rating" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="count" fill="#8b5cf6" barSize={35} radius={[8, 8, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className="w-full h-64 sm:h-72">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={reviewData}
+              margin={{ top: 20, right: 20, left: 0, bottom: 10 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="rating" />
+              <YAxis />
+              <Tooltip />
+              <Bar
+                dataKey="count"
+                fill="#8b5cf6"
+                barSize={35}
+                radius={[8, 8, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
