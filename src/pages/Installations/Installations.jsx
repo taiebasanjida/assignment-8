@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import LoadingSpinner from "../../components/Loading/Loading";
 
 const Installations = () => {
   const [installedApps, setInstalledApps] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortOrder, setSortOrder] = useState(""); 
+  const [sortOrder, setSortOrder] = useState("");
 
-  // Load installed apps from localStorage
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => {
@@ -20,7 +18,6 @@ const Installations = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Uninstall handler
   const handleUninstall = (id) => {
     const updatedApps = installedApps.filter((app) => app.id !== id);
     localStorage.setItem("installedApps", JSON.stringify(updatedApps));
@@ -28,16 +25,25 @@ const Installations = () => {
     toast.success("App uninstalled successfully!");
   };
 
-  // Sort handler
   const handleSort = (e) => {
     const value = e.target.value;
     setSortOrder(value);
-
     const sortedApps = [...installedApps];
-    if (value === "high-low") {
-      sortedApps.sort((a, b) => b.downloads - a.downloads);
-    } else if (value === "low-high") {
-      sortedApps.sort((a, b) => a.downloads - b.downloads);
+    switch (value) {
+      case "downloads-high-low":
+        sortedApps.sort((a, b) => b.downloads - a.downloads);
+        break;
+      case "downloads-low-high":
+        sortedApps.sort((a, b) => a.downloads - b.downloads);
+        break;
+      case "rating-high-low":
+        sortedApps.sort((a, b) => b.ratingAvg - a.ratingAvg);
+        break;
+      case "rating-low-high":
+        sortedApps.sort((a, b) => a.ratingAvg - b.ratingAvg);
+        break;
+      default:
+        break;
     }
     setInstalledApps(sortedApps);
   };
@@ -56,23 +62,24 @@ const Installations = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10 mt-16">
-      <ToastContainer position="top-right" autoClose={2000} />
-
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">My Installation</h1>
         <p className="text-gray-500 mt-2">Manage your installed apps below</p>
       </div>
 
+      {/* Sorting Dropdown */}
       <div className="flex justify-end mb-6">
         <select
           value={sortOrder}
           onChange={handleSort}
           className="border border-gray-300 rounded px-4 py-2"
         >
-          <option value="">Sort by Downloads</option>
-          <option value="high-low">High to Low</option>
-          <option value="low-high">Low to High</option>
+          <option value="">Sort by</option>
+          <option value="downloads-high-low">Downloads: High to Low</option>
+          <option value="downloads-low-high">Downloads: Low to High</option>
+          <option value="rating-high-low">Rating: High to Low</option>
+          <option value="rating-low-high">Rating: Low to High</option>
         </select>
       </div>
 
@@ -83,52 +90,46 @@ const Installations = () => {
             key={app.id}
             className="bg-white rounded-2xl shadow-lg p-4 flex flex-col gap-2 relative"
           >
-            {/* Top Row: Image + Button */}
-            <div className="flex items-start gap-3">
-              <img
-                src={app.image}
-                alt={app.title}
-                className="w-20 h-20 object-cover rounded-xl flex-shrink-0"
-              />
-
-              {/* Title + Company + Stars */}
-              <div className="flex-1 flex flex-col justify-between">
-                <div>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-3">
+                <img
+                  src={app.image}
+                  alt={app.title}
+                  className="w-16 h-16 object-cover rounded-xl flex-shrink-0"
+                />
+                <div className="flex flex-col">
                   <h3 className="font-semibold text-md">{app.title}</h3>
                   <div className="flex items-center gap-1 text-gray-500 text-sm">
                     <span>{app.companyName}</span>
-                    <span className="text-gray-400">▼</span>
                   </div>
+                  <div className="flex items-center gap-1 mt-1">
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar
+                        key={i}
+                        className={`${
+                          i < Math.round(app.ratingAvg)
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                        } text-sm`}
+                      />
+                    ))}
+                    <span className="text-gray-600 text-sm ml-1">
+                      ({app.reviews})
+                    </span>
+                  </div>
+                  <p className="text-gray-600 text-sm mt-1">
+                    Downloads: {app.downloads.toLocaleString()}
+                  </p>
                 </div>
-
-                <div className="flex items-center gap-1 mt-2">
-                  {[...Array(5)].map((_, i) => (
-                    <FaStar
-                      key={i}
-                      className={`${
-                        i < Math.round(app.ratingAvg)
-                          ? "text-yellow-400"
-                          : "text-gray-300"
-                      } text-sm`}
-                    />
-                  ))}
-                  <span className="text-gray-600 text-sm ml-1">
-                    ({app.reviews})
-                  </span>
-                </div>
-
-                <p className="text-gray-600 text-sm mt-1">
-                  Downloads: {app.downloads.toLocaleString()}
-                </p>
               </div>
-
-              {/* Button Right Side */}
-              <button
-                onClick={() => handleUninstall(app.id)}
-                className="ml-auto px-3 py-1 bg-red-600 text-white rounded shadow hover:bg-red-700 transition text-sm self-start"
-              >
-                Uninstall
-              </button>
+              <div className="flex-shrink-0">
+                <button
+                  onClick={() => handleUninstall(app.id)}
+                  className="px-3 py-1 bg-red-600 text-white rounded shadow hover:bg-red-700 transition text-sm"
+                >
+                  Uninstall
+                </button>
+              </div>
             </div>
           </div>
         ))}

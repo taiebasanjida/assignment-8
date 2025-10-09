@@ -1,16 +1,28 @@
-import React, { useState } from "react";
-import appsData from "../../data/appsData"; 
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import appsData from "../../data/appsData";
 import { FaStar } from "react-icons/fa";
+import LoadingSpinner from "../../components/Loading/Loading";
 
 const AllApps = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [showAll, setShowAll] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [filteredApps, setFilteredApps] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const showAll = searchParams.get("show") === "all";
   const navigate = useNavigate();
 
-  const filteredApps = appsData.filter((app) =>
-    app.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      const filtered = appsData.filter((app) =>
+        app.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredApps(filtered);
+      setLoading(false);
+    }, 500); // Simulate loading delay
+    return () => clearTimeout(timer);
+  }, [searchTerm, appsData]);
 
   const appsToShow = showAll ? filteredApps : filteredApps.slice(0, 8);
 
@@ -23,7 +35,6 @@ const AllApps = () => {
             Discover amazing apps for productivity, learning and more.
           </p>
         </div>
-
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
           <p>Total Apps: {filteredApps.length}</p>
           <input
@@ -34,8 +45,9 @@ const AllApps = () => {
             className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/3"
           />
         </div>
-
-        {appsToShow.length === 0 ? (
+        {loading ? (
+          <LoadingSpinner />
+        ) : appsToShow.length === 0 ? (
           <p className="text-center text-gray-500">No App Found</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -67,11 +79,10 @@ const AllApps = () => {
             ))}
           </div>
         )}
-
         {!showAll && filteredApps.length > 8 && (
           <div className="text-center mt-8">
             <button
-              onClick={() => setShowAll(true)}
+              onClick={() => setSearchParams({ show: "all" })}
               className="px-6 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition"
             >
               Show All

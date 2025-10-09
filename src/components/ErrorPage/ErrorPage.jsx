@@ -1,14 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import errorImg from "../../assets/error-404.png"; 
 
 const ErrorPage = () => {
   const navigate = useNavigate();
 
   return (
     <div className="flex flex-col justify-center items-center min-h-[70vh] px-4 text-center">
-      <h1 className="text-5xl md:text-6xl font-bold text-purple-600 mb-4">
-        404
-      </h1>
+      <img src={errorImg} alt="404 Error" className="w-64 mb-6" />
+      <h1 className="text-5xl md:text-6xl font-bold text-purple-600 mb-4">404</h1>
       <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-gray-800">
         Page Not Found
       </h2>
