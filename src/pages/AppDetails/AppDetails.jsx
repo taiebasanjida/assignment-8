@@ -167,14 +167,23 @@ const AppDetails = () => {
       </div>
 
       {/* Description */}
-      <div className="mt-10">
-        <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mt-6 mb-2">
-          Description
-        </h3>
-        <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
-          {app.description}
-        </p>
-      </div>
+     <div className="mt-10">
+  <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mt-6 mb-2">
+    Description
+  </h3>
+  <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
+    This focus app takes the proven Pomodoro technique and makes it even more
+    practical for modern lifestyles. Instead of just setting a timer, it builds
+    a complete environment for deep work, minimizing distractions and maximizing
+    concentration. Users can create custom work and break intervals, track how
+    many sessions they complete each day, and review detailed statistics about
+    their focus habits over time. The design is minimal and calming, reducing
+    cognitive load so you can focus entirely on the task at hand. Notifications
+    gently let you know when to pause and when to resume, helping you maintain a
+    healthy rhythm between work and rest.
+  </p>
+</div>
+
     </div>
   );
 };
