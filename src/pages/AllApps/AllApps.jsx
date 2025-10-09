@@ -6,7 +6,6 @@ import { FaStar } from "react-icons/fa";
 const AllApps = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAll, setShowAll] = useState(false);
-
   const navigate = useNavigate();
 
   const filteredApps = appsData.filter((app) =>
@@ -18,7 +17,6 @@ const AllApps = () => {
   return (
     <section className="bg-white py-16">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Title Section */}
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold">All Apps</h2>
           <p className="text-gray-600 mt-2">
@@ -26,7 +24,6 @@ const AllApps = () => {
           </p>
         </div>
 
-        {/* Search Section */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
           <p>Total Apps: {filteredApps.length}</p>
           <input
@@ -38,7 +35,6 @@ const AllApps = () => {
           />
         </div>
 
-        {/* Apps Grid */}
         {appsToShow.length === 0 ? (
           <p className="text-center text-gray-500">No App Found</p>
         ) : (
@@ -65,14 +61,13 @@ const AllApps = () => {
                   </span>
                 </div>
                 <p className="mt-1 text-gray-600 text-sm">
-                  Downloads: {app.downloads}
+                  Downloads: {app.downloads.toLocaleString()}
                 </p>
               </div>
             ))}
           </div>
         )}
 
-        {/* Show All Button */}
         {!showAll && filteredApps.length > 8 && (
           <div className="text-center mt-8">
             <button

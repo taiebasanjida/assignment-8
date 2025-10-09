@@ -1,8 +1,22 @@
+import app1 from "../assets/demo-app (1).webp";
+import app2 from "../assets/demo-app (2).webp";
+import app3 from "../assets/demo-app (3).webp";
+import app4 from "../assets/demo-app (4).webp";
+import app5 from "../assets/demo-app (5).webp";
+import app6 from "../assets/demo-app (6).webp";
+import app7 from "../assets/demo-app (1).webp";
+import app8 from "../assets/demo-app (2).webp";
+import app9 from "../assets/demo-app (3).webp";
+import app10 from "../assets/demo-app (4).webp";
+import app11 from "../assets/demo-app (6).webp";
+import app12 from "../assets/demo-app (5).webp";
 
-// src/data/appsData.js
+
+
+
 const appsData = [
   {
-    image: "/apps/app1.png",
+    image: app1,
     title: "NoteMaster",
     companyName: "SparkDev",
     id: 1,
@@ -20,7 +34,7 @@ const appsData = [
     ],
   },
   {
-    image: "/apps/app2.png",
+    image: app2,
     title: "FitTrack",
     companyName: "Wellness Inc",
     id: 2,
@@ -38,7 +52,7 @@ const appsData = [
     ],
   },
   {
-    image: "/apps/app3.png",
+    image:app3,
     title: "PhotoFlow",
     companyName: "Pixelate",
     id: 3,
@@ -56,7 +70,7 @@ const appsData = [
     ],
   },
   {
-    image: "/apps/app4.png",
+    image: app4,
     title: "BudgetBuddy",
     companyName: "Finwise",
     id: 4,
@@ -74,7 +88,7 @@ const appsData = [
     ],
   },
   {
-    image: "/apps/app5.png",
+    image: app5,
     title: "LearnLang",
     companyName: "EduNext",
     id: 5,
@@ -92,7 +106,7 @@ const appsData = [
     ],
   },
   {
-    image: "/apps/app6.png",
+    image: app5,
     title: "WeatherNow",
     companyName: "SkyCast",
     id: 6,
@@ -110,7 +124,7 @@ const appsData = [
     ],
   },
   {
-    image: "/apps/app7.png",
+    image: app6,
     title: "TaskFlow",
     companyName: "Prodify",
     id: 7,
@@ -128,7 +142,7 @@ const appsData = [
     ],
   },
   {
-    image: "/apps/app8.png",
+    image: app7,
     title: "PocketRecipes",
     companyName: "Cookly",
     id: 8,
@@ -146,7 +160,7 @@ const appsData = [
     ],
   },
   {
-    image: "/apps/app9.png",
+    image: app8,
     title: "Mindful",
     companyName: "Calmly",
     id: 9,
@@ -164,7 +178,7 @@ const appsData = [
     ],
   },
   {
-    image: "/apps/app10.png",
+    image: app9,
     title: "LanguageCards",
     companyName: "Cardio",
     id: 10,
@@ -182,7 +196,7 @@ const appsData = [
     ],
   },
   {
-    image: "/apps/app11.png",
+    image: app10,
     title: "TravelMate",
     companyName: "Wander",
     id: 11,
@@ -200,7 +214,7 @@ const appsData = [
     ],
   },
   {
-    image: "/apps/app12.png",
+    image: app11,
     title: "SoundScape",
     companyName: "AudioLab",
     id: 12,

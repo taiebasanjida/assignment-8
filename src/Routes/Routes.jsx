@@ -4,8 +4,9 @@ import MainLayout from "../layout/MainLayout";
 import AllApps from "../pages/AllApps/AllApps";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppDetails from "../pages/AppDetails/AppDetails";
-import Installation from "../pages/Installations/Installations";
+
 import Installations from "../pages/Installations/Installations";
+import ErrorPage from "../../src/components/ErrorPage/ErrorPage";
 
 
 
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
     {
     path:"/",
     element:<MainLayout/>,
+    errorElement: <ErrorPage/>,
     children : [
         {
         index:true,
@@ -30,7 +32,8 @@ const router = createBrowserRouter([
         {
             path:"installations",
             element:<Installations/>
-        }
+        },
+        
     ]
 
     }

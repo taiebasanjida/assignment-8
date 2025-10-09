@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
@@ -43,14 +42,12 @@ const Installations = () => {
     setInstalledApps(sortedApps);
   };
 
-  if (loading) return <LoadingSpinner/>;
+  if (loading) return <LoadingSpinner />;
 
   if (installedApps.length === 0)
     return (
-      <div className="text-center py-20">
-        <h2 className="text-2xl font-semibold text-gray-800">
-          No Installed Apps
-        </h2>
+      <div className="text-center py-20 mt-16">
+        <h1 className="text-3xl font-bold text-gray-800">My Installation</h1>
         <p className="text-gray-500 mt-2">
           You have not installed any apps yet.
         </p>
@@ -58,13 +55,16 @@ const Installations = () => {
     );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10">
+    <div className="max-w-7xl mx-auto px-4 py-10 mt-16">
       <ToastContainer position="top-right" autoClose={2000} />
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-        <h2 className="text-3xl font-bold text-gray-800">My Installation</h2>
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">My Installation</h1>
+        <p className="text-gray-500 mt-2">Manage your installed apps below</p>
+      </div>
 
+      <div className="flex justify-end mb-6">
         <select
           value={sortOrder}
           onChange={handleSort}
@@ -81,42 +81,55 @@ const Installations = () => {
         {installedApps.map((app) => (
           <div
             key={app.id}
-            className="bg-white rounded-2xl shadow-md p-4 flex flex-col gap-3"
+            className="bg-white rounded-2xl shadow-lg p-4 flex flex-col gap-2 relative"
           >
-            <img
-              src={app.image}
-              alt={app.title}
-              className="w-full h-40 object-cover rounded-xl"
-            />
-            <h3 className="font-semibold text-lg">{app.title}</h3>
-            <p className="text-gray-500 text-sm">{app.companyName}</p>
+            {/* Top Row: Image + Button */}
+            <div className="flex items-start gap-3">
+              <img
+                src={app.image}
+                alt={app.title}
+                className="w-20 h-20 object-cover rounded-xl flex-shrink-0"
+              />
 
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <FaStar
-                  key={i}
-                  className={`${
-                    i < Math.round(app.ratingAvg)
-                      ? "text-yellow-400"
-                      : "text-gray-300"
-                  }`}
-                />
-              ))}
-              <span className="text-gray-600 text-sm ml-1">
-                ({app.reviews})
-              </span>
+              {/* Title + Company + Stars */}
+              <div className="flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="font-semibold text-md">{app.title}</h3>
+                  <div className="flex items-center gap-1 text-gray-500 text-sm">
+                    <span>{app.companyName}</span>
+                    <span className="text-gray-400">▼</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1 mt-2">
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar
+                      key={i}
+                      className={`${
+                        i < Math.round(app.ratingAvg)
+                          ? "text-yellow-400"
+                          : "text-gray-300"
+                      } text-sm`}
+                    />
+                  ))}
+                  <span className="text-gray-600 text-sm ml-1">
+                    ({app.reviews})
+                  </span>
+                </div>
+
+                <p className="text-gray-600 text-sm mt-1">
+                  Downloads: {app.downloads.toLocaleString()}
+                </p>
+              </div>
+
+              {/* Button Right Side */}
+              <button
+                onClick={() => handleUninstall(app.id)}
+                className="ml-auto px-3 py-1 bg-red-600 text-white rounded shadow hover:bg-red-700 transition text-sm self-start"
+              >
+                Uninstall
+              </button>
             </div>
-
-            <p className="text-gray-600 text-sm">
-              Downloads: {app.downloads.toLocaleString()}
-            </p>
-
-            <button
-              onClick={() => handleUninstall(app.id)}
-              className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-            >
-              Uninstall
-            </button>
           </div>
         ))}
       </div>
