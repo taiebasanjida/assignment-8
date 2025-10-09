@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../../components/Loading/Loading";
+import noAppsImg from "../../assets/App-Error.png"
 
 const Installations = () => {
   const [installedApps, setInstalledApps] = useState([]);
@@ -50,9 +51,15 @@ const Installations = () => {
 
   if (loading) return <LoadingSpinner />;
 
+  //  Empty State with Image
   if (installedApps.length === 0)
     return (
-      <div className="text-center py-20 mt-16">
+      <div className="text-center py-20 mt-16 flex flex-col items-center">
+        <img
+          src={noAppsImg}
+          alt="No Installed Apps"
+          className="w-60 sm:w-72 mb-6 opacity-90"
+        />
         <h1 className="text-3xl font-bold text-gray-800">My Installation</h1>
         <p className="text-gray-500 mt-2">
           You have not installed any apps yet.
@@ -85,55 +92,61 @@ const Installations = () => {
 
       {/* Apps Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {installedApps.map((app) => (
-          <div
-            key={app.id}
-            className="bg-white rounded-2xl shadow-lg p-4 flex flex-col gap-2 relative"
-          >
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-3">
-                <img
-                  src={app.image}
-                  alt={app.title}
-                  className="w-16 h-16 object-cover rounded-xl flex-shrink-0"
-                />
-                <div className="flex flex-col">
-                  <h3 className="font-semibold text-md">{app.title}</h3>
-                  <div className="flex items-center gap-1 text-gray-500 text-sm">
-                    <span>{app.companyName}</span>
-                  </div>
-                  <div className="flex items-center gap-1 mt-1">
-                    {[...Array(5)].map((_, i) => (
-                      <FaStar
-                        key={i}
-                        className={`${
-                          i < Math.round(app.ratingAvg)
-                            ? "text-yellow-400"
-                            : "text-gray-300"
-                        } text-sm`}
-                      />
-                    ))}
-                    <span className="text-gray-600 text-sm ml-1">
-                      ({app.reviews})
-                    </span>
-                  </div>
-                  <p className="text-gray-600 text-sm mt-1">
-                    Downloads: {app.downloads.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-              <div className="flex-shrink-0">
-                <button
-                  onClick={() => handleUninstall(app.id)}
-                  className="px-3 py-1 bg-red-600 text-white rounded shadow hover:bg-red-700 transition text-sm"
-                >
-                  Uninstall
-                </button>
-              </div>
+  {installedApps.map((app) => (
+    <div
+      key={app.id}
+      className="bg-white rounded-2xl shadow-lg p-4 flex flex-col gap-2"
+    >
+      {/* Main Container with justify-between */}
+      <div className="flex items-center justify-between w-full gap-3">
+        {/* Left Side: Image + Text/Content */}
+        <div className="flex items-center gap-3">
+          {/* Image */}
+          <img
+            src={app.image}
+            alt={app.title}
+            className="w-16 h-16 object-cover rounded-xl flex-shrink-0"
+          />
+          {/* Text/Content Container */}
+          <div className="flex flex-col">
+            <h3 className="font-semibold text-md truncate">{app.title}</h3>
+            <div className="flex items-center gap-1 text-gray-500 text-sm">
+              <span className="truncate">{app.companyName}</span>
             </div>
+            <div className="flex items-center gap-1 mt-1">
+              {[...Array(5)].map((_, i) => (
+                <FaStar
+                  key={i}
+                  className={`${
+                    i < Math.round(app.ratingAvg)
+                      ? "text-yellow-400"
+                      : "text-gray-300"
+                  } text-sm`}
+                />
+              ))}
+              <span className="text-gray-600 text-sm ml-1">
+                ({app.reviews})
+              </span>
+            </div>
+            <p className="text-gray-600 text-sm mt-1 truncate">
+              Downloads: {app.downloads.toLocaleString()}
+            </p>
           </div>
-        ))}
+        </div>
+        {/* Right Side: Button */}
+        <div className="flex-shrink-0">
+          <button
+            onClick={() => handleUninstall(app.id)}
+            className="px-3 py-1 bg-red-600 text-white rounded shadow hover:bg-red-700 transition text-sm whitespace-nowrap"
+          >
+            Uninstall
+          </button>
+        </div>
       </div>
+    </div>
+  ))}
+</div>
+
     </div>
   );
 };
