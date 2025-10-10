@@ -30,7 +30,7 @@ const AllApps = () => {
     <section className="bg-white py-16">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold">All Apps</h2>
+          <h2 className="text-3xl font-bold">Trending Apps</h2>
           <p className="text-gray-600 mt-2">
             Discover amazing apps for productivity, learning and more.
           </p>

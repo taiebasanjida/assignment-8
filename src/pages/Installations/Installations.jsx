@@ -2,30 +2,45 @@ import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../../components/Loading/Loading";
-import noAppsImg from "../../assets/App-Error.png";
+import noAppsImg from "../../assets/App-Error.png"; // No apps image
 
 const Installations = () => {
   const [installedApps, setInstalledApps] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("");
+  const [showWelcome, setShowWelcome] = useState(true); // প্রথমবারের জন্য
 
+  // Load installed apps
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => {
       const apps = JSON.parse(localStorage.getItem("installedApps")) || [];
       setInstalledApps(apps);
+
+      // প্রথমবারে welcome circle দেখাবে
+      setShowWelcome(apps.length === 0 && !localStorage.getItem("visitedInstallPage"));
+
+      // এবার পেজ ভিজিট হয়েছে mark করে দাও
+      localStorage.setItem("visitedInstallPage", "true");
+
       setLoading(false);
     }, 400);
+
     return () => clearTimeout(timer);
   }, []);
 
+  // Handle uninstall
   const handleUninstall = (id) => {
     const updatedApps = installedApps.filter((app) => app.id !== id);
     localStorage.setItem("installedApps", JSON.stringify(updatedApps));
     setInstalledApps(updatedApps);
+
+    // সব uninstall হলে "No Apps" ইমেজ দেখাবে
+    setShowWelcome(false);
     toast.success("App uninstalled successfully!");
   };
 
+  // Sorting logic
   const handleSort = (e) => {
     const value = e.target.value;
     setSortOrder(value);
@@ -51,29 +66,52 @@ const Installations = () => {
 
   if (loading) return <LoadingSpinner />;
 
-  // Empty State with Image
-  if (installedApps.length === 0)
+  // Empty state
+  if (installedApps.length === 0) {
     return (
-      <div className="text-center py-20 mt-16 flex flex-col items-center">
-        <img
-          src={noAppsImg}
-          alt="No Installed Apps"
-          className="w-60 sm:w-72 mb-6 opacity-90"
-        />
-        <h1 className="text-3xl font-bold text-gray-800">My Installation</h1>
+      <div className="text-center py-20 mt-16 flex flex-col items-center space-y-4">
+        {showWelcome ? (
+          // Welcome circle
+          <div className="relative w-64 h-64 bg-gradient-to-tr from-indigo-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl animate-pulse">
+            <div className="text-white text-center px-6">
+              <h2 className="text-3xl font-bold mb-2 drop-shadow-lg">Welcome!</h2>
+              <p className="text-sm opacity-90">
+                Your installed apps will appear here soon.
+              </p>
+            </div>
+          </div>
+        ) : (
+          // No Apps image
+          <img
+            src={noAppsImg}
+            alt="No Installed Apps"
+            className="w-60 sm:w-72 mb-6 opacity-90"
+          />
+        )}
+
+        <h1 className="text-3xl font-bold text-gray-800">
+          {showWelcome ? "Welcome to Installations" : "My Installation"}
+        </h1>
         <p className="text-gray-500 mt-2">
-          You have not installed any apps yet.
+          {showWelcome
+            ? "Start installing your favorite apps to see them here."
+            : "You have not installed any apps yet."}
         </p>
       </div>
     );
+  }
 
   // Summary calculations
   const totalApps = installedApps.length;
-  const totalDownloads = installedApps.reduce((sum, app) => sum + app.downloads, 0);
+  const totalDownloads = installedApps.reduce(
+    (sum, app) => sum + app.downloads,
+    0
+  );
   const averageRating = (
     installedApps.reduce((sum, app) => sum + app.ratingAvg, 0) / totalApps
   ).toFixed(1);
 
+  // Main UI
   return (
     <div className="max-w-7xl mx-auto px-4 py-10 mt-16">
       {/* Header */}
@@ -87,7 +125,7 @@ const Installations = () => {
         <select
           value={sortOrder}
           onChange={handleSort}
-          className="border border-gray-300 rounded px-4 py-2"
+          className="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
         >
           <option value="">Sort by</option>
           <option value="downloads-high-low">Downloads: High to Low</option>
@@ -102,9 +140,8 @@ const Installations = () => {
         {installedApps.map((app) => (
           <div
             key={app.id}
-            className="bg-white rounded-2xl shadow-lg p-4 flex flex-col justify-between"
+            className="bg-white rounded-2xl shadow-lg p-4 flex flex-col justify-between transition-transform hover:scale-105 duration-200"
           >
-            {/* Top Section: App Info */}
             <div className="flex items-center gap-3 mb-3">
               <img
                 src={app.image}
@@ -137,7 +174,6 @@ const Installations = () => {
               </div>
             </div>
 
-            {/* Bottom Section: Button */}
             <button
               onClick={() => handleUninstall(app.id)}
               className="w-full mt-2 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition text-sm"
@@ -158,7 +194,10 @@ const Installations = () => {
             <span className="font-bold">{totalApps}</span> Installed Apps
           </p>
           <p>
-            <span className="font-bold">{totalDownloads.toLocaleString()}</span> Total Downloads
+            <span className="font-bold">
+              {totalDownloads.toLocaleString()}
+            </span>{" "}
+            Total Downloads
           </p>
           <p>
             <span className="font-bold">{averageRating}</span> Avg. Rating

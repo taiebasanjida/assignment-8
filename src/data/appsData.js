@@ -231,6 +231,7 @@ const appsData = [
       { name: "5 star", count: 70 }
     ],
   }
+  
 ];
 
 export default appsData;
