@@ -1,24 +1,26 @@
-import React from "react";
-import { Outlet, useNavigation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
-
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import LoadingSpinner from "../components/Loading/Loading";
-import Footer from "../components/Navbar/Footer/Footer";
+import Footer from "../components/Footer/Footer"; // Footer এর সঠিক import path
+import AllApps from "../pages/AllApps/AllApps";
+import Home from "../pages/Home/Home";
 
 const MainLayout = () => {
-  const navigation = useNavigation();
+  const location = useLocation();
+  const showHome = location.pathname === "/"; // "/" route এ Home দেখাবে
 
   return (
-    <>
-      <ToastContainer position="top-right" autoClose={2000} />
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="min-h-screen">
-        {navigation.state === "loading" ? <LoadingSpinner /> : <Outlet />}
-      </div>
+
+      {/* "/" route এ Home + Top 8 AllApps */}
+      {showHome && <Home />}
+      {showHome && <AllApps topOnly={true} />}
+
+      {/* Other routes */}
+      {!showHome && <Outlet />}
+
       <Footer />
-    </>
+    </div>
   );
 };
 
